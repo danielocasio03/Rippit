@@ -42,7 +42,7 @@ class EmoticonCell: UICollectionViewCell {
 		// Shadow settings
 		layer.shadowColor = UIColor.black.cgColor
 		layer.shadowOpacity = 0.3
-		layer.shadowOffset = CGSize(width: -3, height: 3)
+		layer.shadowOffset = CGSize(width: -2, height: 2)
 		layer.shadowRadius = 5
 		
 		//Emoticon Image

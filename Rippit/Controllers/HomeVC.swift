@@ -33,6 +33,8 @@ class HomeVC: UIViewController {
 	
 	//This is the collection view that holds all of the emotes
 	lazy var emoticonCollection = EmoticonCollectionView()
+	var emoticonCollectionTopConstraint: NSLayoutConstraint! //Reference to the collectionviews top constraint
+
 	
 	
 	//MARK: - Life Cycle Methods
@@ -59,7 +61,8 @@ class HomeVC: UIViewController {
 		self.view.addSubview(newButton)
 		//Emoticon Collection
 		self.view.addSubview(emoticonCollection)
-		
+		emoticonCollectionTopConstraint = emoticonCollection.topAnchor.constraint(equalTo: newButton.bottomAnchor, constant: 10)
+
 		NSLayoutConstraint.activate([
 			//Popular Button
 			popularButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -72,10 +75,9 @@ class HomeVC: UIViewController {
 			newButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
 			newButton.heightAnchor.constraint(equalToConstant: 30),
 			//Emoticon Collection
-			//fix
-			emoticonCollection.topAnchor.constraint(equalTo: newButton.bottomAnchor, constant: 10),
-			emoticonCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-			emoticonCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+			emoticonCollectionTopConstraint,
+			emoticonCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+			emoticonCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
 			emoticonCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 		])
 		
@@ -96,7 +98,7 @@ extension HomeVC: UISearchResultsUpdating {
 		if let customFont = UIFont(name: "AvenirNext-Bold", size: 24) {
 			navigationController?.navigationBar.titleTextAttributes = [
 				.foregroundColor: DesignManager.shared.navyBlueText, //Custom Color
-				.font: customFont                      // Apply Custom Font
+				.font: customFont                      
 			]
 		}
 	}
@@ -127,7 +129,8 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	//General setup of the Emoticon Collection View
 	func setupCollectionView() {
-		emoticonCollection.translatesAutoresizingMaskIntoConstraints = false // fix
+		
+		emoticonCollection.translatesAutoresizingMaskIntoConstraints = false
 		emoticonCollection.dataSource = self
 		emoticonCollection.delegate = self
 		emoticonCollection.register(EmoticonCell.self,
@@ -146,7 +149,36 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 		
 		return cell
 	}
+}
+
+
+//MARK: - EXT: ScrollViewDelegate
+extension HomeVC: UIScrollViewDelegate {
 	
-	
+	//Called when the scrollview is scrolled (Collectionview in this case)
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		let yOffset = scrollView.contentOffset.y
+		
+		// Total space that can be collapsed (buttons height, navbar/search bar height)
+		let maxMovement = popularButton.frame.height + (navigationController?.navigationBar.frame.height ?? 0)
+		
+		// Move collection view, fade and translate buttons, fade search bar
+		let isScrollingDown = yOffset > 0
+		let movement = min(yOffset, maxMovement)
+		
+		//The Constraint constant for the collectionview
+		let newConstant: CGFloat = isScrollingDown ? -movement : 10
+		emoticonCollectionTopConstraint.constant = newConstant
+		
+		//Calculate the subview Alpha's and apply them to give a fade in/out animation
+		let buttonAlpha = isScrollingDown ? max(0, 1 - (yOffset / (maxMovement * 0.08))) : 1
+		let searchBarAlpha = isScrollingDown ? max(0, 1 - (yOffset / (maxMovement * 0.30))) : 1
+		popularButton.alpha = buttonAlpha
+		newButton.alpha = buttonAlpha
+		popularButton.transform = isScrollingDown ? CGAffineTransform(translationX: 0, y: -yOffset / 2) : .identity
+		newButton.transform = isScrollingDown ? CGAffineTransform(translationX: 0, y: -yOffset / 2) : .identity
+		navigationItem.searchController?.searchBar.alpha = searchBarAlpha
+		
+	}
 	
 }

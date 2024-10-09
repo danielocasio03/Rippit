@@ -12,9 +12,11 @@ class EmoticonCollectionView: UICollectionView {
 	
 	
 	//MARK: - Init
+	
 	override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
 		super.init(frame: .zero, collectionViewLayout: EmoticonCollectionView.collectionLayoutSetup())
 		
+		self.clipsToBounds = false
 		backgroundColor = DesignManager.shared.lightBgColor
 		
 	}
@@ -29,12 +31,17 @@ class EmoticonCollectionView: UICollectionView {
 		
 		//Item
 		let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
-			widthDimension: .fractionalWidth(0.33), heightDimension: .fractionalHeight(1)))
-		item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6)
+			widthDimension: .fractionalWidth(0.33333),
+			heightDimension: .fractionalHeight(1))
+		)
+		item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
 		
 		//Group
 		let group = NSCollectionLayoutGroup.horizontal(
-			layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.18)),
+			layoutSize: NSCollectionLayoutSize(
+				widthDimension: .fractionalWidth(1),
+				heightDimension: .fractionalHeight(0.18)
+			),
 			subitems: [item]
 		)
 		
