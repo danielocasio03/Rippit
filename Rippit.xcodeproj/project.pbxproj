@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		933B7B792CBF327100785A3A /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933B7B782CBF327100785A3A /* LoadingFooterView.swift */; };
+		935F32952CB754E400BFC7A7 /* EmoticonsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */; };
+		935F32972CB754F200BFC7A7 /* EmoticonsFetchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */; };
 		93C90F652CB4947B00F68D42 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F642CB4947B00F68D42 /* AppDelegate.swift */; };
 		93C90F672CB4947B00F68D42 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F662CB4947B00F68D42 /* SceneDelegate.swift */; };
 		93C90F692CB4947B00F68D42 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F682CB4947B00F68D42 /* HomeVC.swift */; };
@@ -20,6 +23,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		933B7B782CBF327100785A3A /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
+		935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonsModel.swift; sourceTree = "<group>"; };
+		935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonsFetchManager.swift; sourceTree = "<group>"; };
 		93C90F612CB4947B00F68D42 /* Rippit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rippit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C90F642CB4947B00F68D42 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		93C90F662CB4947B00F68D42 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +51,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		935F32982CB754FC00BFC7A7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */,
+				935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		93C90F582CB4947B00F68D42 = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				93C90F7C2CB4963900F68D42 /* DesignManager.swift */,
+				935F32982CB754FC00BFC7A7 /* Model */,
 				93C90F802CB49C4300F68D42 /* Views */,
 				93C90F7B2CB494B400F68D42 /* Controllers */,
 				93C90F662CB4947B00F68D42 /* SceneDelegate.swift */,
@@ -91,6 +107,7 @@
 				93C90F7E2CB49C3E00F68D42 /* EmoticonCollectionView.swift */,
 				93C90F812CB49DE100F68D42 /* EmoticonCell.swift */,
 				93C90F852CB4A12200F68D42 /* CategoryButton.swift */,
+				933B7B782CBF327100785A3A /* LoadingFooterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -167,11 +184,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				93C90F692CB4947B00F68D42 /* HomeVC.swift in Sources */,
+				935F32952CB754E400BFC7A7 /* EmoticonsModel.swift in Sources */,
 				93C90F862CB4A12200F68D42 /* CategoryButton.swift in Sources */,
 				93C90F652CB4947B00F68D42 /* AppDelegate.swift in Sources */,
 				93C90F7D2CB4963900F68D42 /* DesignManager.swift in Sources */,
 				93C90F822CB49DE100F68D42 /* EmoticonCell.swift in Sources */,
 				93C90F672CB4947B00F68D42 /* SceneDelegate.swift in Sources */,
+				935F32972CB754F200BFC7A7 /* EmoticonsFetchManager.swift in Sources */,
+				933B7B792CBF327100785A3A /* LoadingFooterView.swift in Sources */,
 				93C90F7F2CB49C3E00F68D42 /* EmoticonCollectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

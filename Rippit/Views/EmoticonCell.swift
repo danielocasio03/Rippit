@@ -51,10 +51,8 @@ class EmoticonCell: UICollectionViewCell {
 		NSLayoutConstraint.activate([
 			//Emoticon Image
 			EmoticonImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-			EmoticonImage.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5),
-			EmoticonImage.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5),
-			EmoticonImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 7),
-			EmoticonImage.bottomAnchor.constraint(equalTo: self.centerYAnchor, constant: 10),
+			EmoticonImage.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+			EmoticonImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.60)
 		])
 		
 	}

@@ -48,6 +48,22 @@ class EmoticonCollectionView: UICollectionView {
 		//Sections
 		let section = NSCollectionLayoutSection(group: group)
 		
+		// Footer setup
+		let footerSize = NSCollectionLayoutSize(
+			widthDimension: .fractionalWidth(1.0),
+			heightDimension: .absolute(100)
+		)
+		
+		//Defining a Footer for the custom collectionview layout
+		let footer = NSCollectionLayoutBoundarySupplementaryItem(
+			layoutSize: footerSize,
+			elementKind: UICollectionView.elementKindSectionFooter,
+			alignment: .bottom
+		)
+		
+		// Add footer to the section
+		section.boundarySupplementaryItems = [footer]
+		
 		return UICollectionViewCompositionalLayout(section: section)
 		
 	}
