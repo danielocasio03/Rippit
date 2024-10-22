@@ -12,9 +12,7 @@ import Foundation
 class HomeVC: UIViewController {
 	
 	//MARK: - Declarations
-	
-	let searchController = UISearchController(searchResultsController: nil)
-	
+		
 	let fetchManager = EmoticonsFetchManager()
 	
 	private var cancellables = Set<AnyCancellable>()
@@ -50,6 +48,16 @@ class HomeVC: UIViewController {
 		
 		return button
 	}()
+	
+	//Button that goes in the nav bar and links to the favorites page
+	lazy var favoriteButton: UIBarButtonItem = {
+		let button = FavoriteButton(frame: .zero, color: .clear)
+		button.addTarget(self, action: #selector(favoritesTapped), for: .touchUpInside)
+		let configuration = UIImage.SymbolConfiguration(pointSize: 25, weight: .regular)
+		button.setImage(UIImage(systemName: "heart.fill", withConfiguration: configuration), for: .normal)
+		let barButton = UIBarButtonItem(customView: button)
+		return barButton
+	}()
 
 	
 	//This is the collection view that holds all of the emotes
@@ -65,7 +73,6 @@ class HomeVC: UIViewController {
 		
 		setupView()
 		setupNavController()
-		setupSearchController()
 		setupCollectionView()
 		fetchEmoticons(category: "popular")
 		
@@ -103,6 +110,23 @@ class HomeVC: UIViewController {
 			emoticonCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
 			emoticonCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 		])
+	}
+	
+	
+	//Function for the general setup of the Nav Controller
+	func setupNavController() {
+		// Set the title for the nav bar
+		self.title = "Rippit"
+		
+		// Customizing the nav Title
+		if let customFont = UIFont(name: "AvenirNext-Bold", size: 24) {
+			navigationController?.navigationBar.titleTextAttributes = [
+				.foregroundColor: DesignManager.shared.navyBlueText,
+					.font: customFont
+			]
+		}
+		navigationItem.rightBarButtonItem = favoriteButton
+		
 	}
 	
 	
@@ -153,6 +177,15 @@ class HomeVC: UIViewController {
 		
 	}
 	
+	//Action Button for when the favorites button is tapped
+	@objc func favoritesTapped() {
+		print("Button tapped")
+		let favoritesVC = FavoritesVC()
+		self.navigationController?.pushViewController(favoritesVC, animated: true)
+		
+	}
+	
+	
 	//Method handling the fetch of the Emoticons from the database
 	func fetchEmoticons(category: String) {
 		
@@ -188,46 +221,6 @@ class HomeVC: UIViewController {
 	
 }
 
-
-
-//MARK: - EXT: Search Controller & Navigation Controller
-extension HomeVC: UISearchResultsUpdating {
-	
-	//Function for the general setup of the Nav Controller
-	func setupNavController() {
-		// Set the title for the nav bar
-		self.title = "Rippit"
-		
-		// Customizing the nav Title
-		if let customFont = UIFont(name: "AvenirNext-Bold", size: 24) {
-			navigationController?.navigationBar.titleTextAttributes = [
-				.foregroundColor: DesignManager.shared.navyBlueText, 
-				.font: customFont                      
-			]
-		}
-	}
-	
-	
-	//Function for the general setup of the Search Controller
-	func setupSearchController() {
-		
-		//Search Controller
-		searchController.searchResultsUpdater = self
-		searchController.obscuresBackgroundDuringPresentation = true
-		searchController.searchBar.placeholder = "Search for emoticons..."
-		navigationItem.searchController = searchController
-		definesPresentationContext = true
-		
-	}
-	
-	
-	//Update Search Results method
-	func updateSearchResults(for searchController: UISearchController) {
-		print("search typed in")
-	}
-}
-
-
 //MARK: - EXT: Collection View
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	
@@ -259,8 +252,8 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell", 
 														  for: indexPath) as! EmoticonCell
 		//Assignment of the image to the cell
-		let cellForImage = onScreenEmoticons[indexPath.item].image
-		cell.EmoticonImage.image = cellForImage
+		let imageForCell = onScreenEmoticons[indexPath.item].image
+		cell.EmoticonImage.image = imageForCell
 		
 		return cell
 	}
@@ -274,8 +267,15 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 																		 for: indexPath) as! LoadingFooterView
 			return footer
 		}
-		
 		return UICollectionReusableView()
+	}
+	
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		
+		//Getting the selected emoticon using index path's item; then presenting SelectedEmoticonVC with it
+		let selectedEmoticon = onScreenEmoticons[indexPath.item]
+		let emoticonVC = SelectedEmoticonVC(selectedEmoticon: selectedEmoticon)
+		self.present(emoticonVC, animated: true)
 	}
 	
 	
@@ -292,7 +292,7 @@ extension HomeVC: UIScrollViewDelegate {
 		// Total space that can be collapsed (buttons height, navbar/search bar height)
 		let maxMovement = popularButton.frame.height + (navigationController?.navigationBar.frame.height ?? 0)
 		
-		// Move collection view, fade and translate buttons, fade search bar
+		// Move collection view, fade and translate buttons
 		let isScrollingDown = yOffset > 0
 		let movement = min(yOffset, maxMovement)
 		

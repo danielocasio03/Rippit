@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		933682B82CC8469400EA5958 /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933682B72CC8469400EA5958 /* FavoriteButton.swift */; };
+		933682BC2CC85C2C00EA5958 /* FavoritesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933682BB2CC85C2C00EA5958 /* FavoritesVC.swift */; };
+		933682BF2CC8603300EA5958 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 933682BE2CC8603300EA5958 /* CoreData.framework */; };
 		933B7B792CBF327100785A3A /* LoadingFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933B7B782CBF327100785A3A /* LoadingFooterView.swift */; };
+		93515C642CC862BB00695BE2 /* Favorites.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 93515C622CC862BB00695BE2 /* Favorites.xcdatamodeld */; };
+		93515C672CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93515C652CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift */; };
+		93515C682CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */; };
 		935F32952CB754E400BFC7A7 /* EmoticonsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */; };
 		935F32972CB754F200BFC7A7 /* EmoticonsFetchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */; };
 		93C90F652CB4947B00F68D42 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F642CB4947B00F68D42 /* AppDelegate.swift */; };
@@ -20,10 +26,17 @@
 		93C90F7F2CB49C3E00F68D42 /* EmoticonCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F7E2CB49C3E00F68D42 /* EmoticonCollectionView.swift */; };
 		93C90F822CB49DE100F68D42 /* EmoticonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F812CB49DE100F68D42 /* EmoticonCell.swift */; };
 		93C90F862CB4A12200F68D42 /* CategoryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F852CB4A12200F68D42 /* CategoryButton.swift */; };
+		93E94B6D2CC1CB7200FBE97F /* SelectedEmoticonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E94B6C2CC1CB7200FBE97F /* SelectedEmoticonVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		933682B72CC8469400EA5958 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
+		933682BB2CC85C2C00EA5958 /* FavoritesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVC.swift; sourceTree = "<group>"; };
+		933682BE2CC8603300EA5958 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		933B7B782CBF327100785A3A /* LoadingFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingFooterView.swift; sourceTree = "<group>"; };
+		93515C632CC862BB00695BE2 /* Favorites.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Favorites.xcdatamodel; sourceTree = "<group>"; };
+		93515C652CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritedEmoticon+CoreDataClass.swift"; sourceTree = "<group>"; };
+		93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritedEmoticon+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonsModel.swift; sourceTree = "<group>"; };
 		935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonsFetchManager.swift; sourceTree = "<group>"; };
 		93C90F612CB4947B00F68D42 /* Rippit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rippit.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +51,7 @@
 		93C90F7E2CB49C3E00F68D42 /* EmoticonCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonCollectionView.swift; sourceTree = "<group>"; };
 		93C90F812CB49DE100F68D42 /* EmoticonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonCell.swift; sourceTree = "<group>"; };
 		93C90F852CB4A12200F68D42 /* CategoryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryButton.swift; sourceTree = "<group>"; };
+		93E94B6C2CC1CB7200FBE97F /* SelectedEmoticonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedEmoticonVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,15 +59,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				933682BF2CC8603300EA5958 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		933682BD2CC8603300EA5958 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				933682BE2CC8603300EA5958 /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		93515C612CC8625F00695BE2 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				93515C622CC862BB00695BE2 /* Favorites.xcdatamodeld */,
+				93515C652CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift */,
+				93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		935F32982CB754FC00BFC7A7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				93515C612CC8625F00695BE2 /* CoreData */,
 				935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */,
 				935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */,
 			);
@@ -64,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				93C90F632CB4947B00F68D42 /* Rippit */,
+				933682BD2CC8603300EA5958 /* Frameworks */,
 				93C90F622CB4947B00F68D42 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,6 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				93C90F682CB4947B00F68D42 /* HomeVC.swift */,
+				93E94B6C2CC1CB7200FBE97F /* SelectedEmoticonVC.swift */,
+				933682BB2CC85C2C00EA5958 /* FavoritesVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -108,6 +145,7 @@
 				93C90F812CB49DE100F68D42 /* EmoticonCell.swift */,
 				93C90F852CB4A12200F68D42 /* CategoryButton.swift */,
 				933B7B782CBF327100785A3A /* LoadingFooterView.swift */,
+				933682B72CC8469400EA5958 /* FavoriteButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -186,11 +224,17 @@
 				93C90F692CB4947B00F68D42 /* HomeVC.swift in Sources */,
 				935F32952CB754E400BFC7A7 /* EmoticonsModel.swift in Sources */,
 				93C90F862CB4A12200F68D42 /* CategoryButton.swift in Sources */,
+				93515C642CC862BB00695BE2 /* Favorites.xcdatamodeld in Sources */,
+				933682B82CC8469400EA5958 /* FavoriteButton.swift in Sources */,
 				93C90F652CB4947B00F68D42 /* AppDelegate.swift in Sources */,
+				933682BC2CC85C2C00EA5958 /* FavoritesVC.swift in Sources */,
 				93C90F7D2CB4963900F68D42 /* DesignManager.swift in Sources */,
 				93C90F822CB49DE100F68D42 /* EmoticonCell.swift in Sources */,
+				93515C672CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift in Sources */,
+				93515C682CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift in Sources */,
 				93C90F672CB4947B00F68D42 /* SceneDelegate.swift in Sources */,
 				935F32972CB754F200BFC7A7 /* EmoticonsFetchManager.swift in Sources */,
+				93E94B6D2CC1CB7200FBE97F /* SelectedEmoticonVC.swift in Sources */,
 				933B7B792CBF327100785A3A /* LoadingFooterView.swift in Sources */,
 				93C90F7F2CB49C3E00F68D42 /* EmoticonCollectionView.swift in Sources */,
 			);
@@ -347,6 +391,7 @@
 				DEVELOPMENT_TEAM = 2GNX9Y2SZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Rippit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Rippit;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -375,6 +420,7 @@
 				DEVELOPMENT_TEAM = 2GNX9Y2SZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Rippit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Rippit;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -415,6 +461,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		93515C622CC862BB00695BE2 /* Favorites.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				93515C632CC862BB00695BE2 /* Favorites.xcdatamodel */,
+			);
+			currentVersion = 93515C632CC862BB00695BE2 /* Favorites.xcdatamodel */;
+			path = Favorites.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 93C90F592CB4947B00F68D42 /* Project object */;
 }
