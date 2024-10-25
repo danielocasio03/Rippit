@@ -7,22 +7,29 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class SelectedEmoticonVC: UIViewController {
 	
 	//MARK: - Declarations
 	
-	var selectedEmoticon: Emoticon
+	var emoticonID: Int
 	
+	var emoticonName: String
+	
+	var emoticonImage: UIImage
+	
+	var didUpdateEmote: (() -> Void)?
+		
 	//Reference to coredata persistent container
 	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 	
 	//Image for the Emoticon
-	lazy var emoticonImage: UIImageView = {
+	lazy var emoticonImageView: UIImageView = {
 		let image = UIImageView()
 		image.translatesAutoresizingMaskIntoConstraints = false
 		image.contentMode = .scaleAspectFit
-		image.image = selectedEmoticon.image
+		image.image = emoticonImage
 
 		return image
 	}()
@@ -42,7 +49,7 @@ class SelectedEmoticonVC: UIViewController {
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.font = UIFont(name: "AvenirNext-Bold", size: 20 )
 		label.textColor = DesignManager.shared.navyBlueText
-		label.text = "Emote Name: \(selectedEmoticon.name)"
+		label.text = "Emote Name: \(emoticonName)"
 		
 		return label
 	}()
@@ -56,6 +63,7 @@ class SelectedEmoticonVC: UIViewController {
 		button.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 18)
 		button.backgroundColor = DesignManager.shared.selectedBlueAccent
 		button.layer.cornerRadius = 10
+		button.addTarget(self, action: #selector(copyTapped), for: .touchUpInside)
 		
 		return button
 	}()
@@ -64,6 +72,7 @@ class SelectedEmoticonVC: UIViewController {
 		
 		let button = FavoriteButton(frame: .zero, color: DesignManager.shared.lightBgColor)
 		button.addTarget(self, action: #selector(favoritesTapped), for: .touchUpInside)
+		button.isSelected = isEmoticonFavorited()
 		
 		return button
 	}()
@@ -75,9 +84,11 @@ class SelectedEmoticonVC: UIViewController {
 	//MARK: -  Init and Override
 	
 	//Custom Initializer for taking in the selected Emoticons Data; then assigning injected data to our local variable
-	init(selectedEmoticon: Emoticon) {
+	init(id: Int, name: String, image: UIImage) {
 		
-		self.selectedEmoticon = selectedEmoticon
+		self.emoticonID = id
+		self.emoticonName = name
+		self.emoticonImage = image
 		super.init(nibName: nil, bundle: nil)
 		
 	}
@@ -115,7 +126,7 @@ class SelectedEmoticonVC: UIViewController {
 		//ContainerView
 		view.addSubview(containerView)
 		//Emoticon Image
-		view.addSubview(emoticonImage)
+		view.addSubview(emoticonImageView)
 
 
 		NSLayoutConstraint.activate([
@@ -125,10 +136,10 @@ class SelectedEmoticonVC: UIViewController {
 			containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 			//Emoticon Image
-			emoticonImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			emoticonImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-			emoticonImage.bottomAnchor.constraint(equalTo: containerView.topAnchor),
-			emoticonImage.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.40),
+			emoticonImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			emoticonImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+			emoticonImageView.bottomAnchor.constraint(equalTo: containerView.topAnchor),
+			emoticonImageView.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.40),
 		])
 	}
 	
@@ -161,25 +172,73 @@ class SelectedEmoticonVC: UIViewController {
 	}
 	
 	
-	//MARK: - Action and Helper Methods
+	//MARK: - Action Methods
 	
-	//Method called when favorite button is tapped; saving emoticon to coredata
+	//Action function called when the favorites button is tapped
 	@objc func favoritesTapped() {
-		favoriteButton.isSelected = true
-		let favoritedEmoticon = FavoritedEmoticon(context: context)
-		
-		favoritedEmoticon.id = Int32(selectedEmoticon.id)
-		favoritedEmoticon.name = selectedEmoticon.name
-		favoritedEmoticon.imageData = selectedEmoticon.image?.pngData()
-		
-		do {
-			try context.save()
-			print("Successfully saved Emoticon")
-		} catch {
-			print("Failed to save emoticon: \(error)")
-		}
-		
+		favoriteButton.isSelected.toggle()
+		toggleFavoriteInCoreData(isFavorited: favoriteButton.isSelected)
 	}
 	
+	//Action function called when the favorites button is tapped
+	@objc func copyTapped() {
+		UIPasteboard.general.image = emoticonImage // Copies image to the clipboard
+		let alert = UIAlertController(title: "Copied!", message: "The emoticon has been copied to your clipboard.", preferredStyle: .alert)
+		alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+		present(alert, animated: true, completion: nil)
+	}
+	
+	
+	//MARK: - Helper Methods
+	
+	//Checks if an emoticon exists in coredata and returns true or false
+	private func isEmoticonFavorited() -> Bool {
+		return fetchFavoritedEmoticons().isEmpty == false
+	}
+	
+	//Fetches Emoticon from coredata with a predicate of the selectedEmoticonsID. if the Emoticon exists in coredata it returns an array with it inside. Else it returns an empty array
+	private func fetchFavoritedEmoticons() -> [FavoritedEmoticon] {
+		let fetchRequest: NSFetchRequest<FavoritedEmoticon> = FavoritedEmoticon.fetchRequest()
+		fetchRequest.predicate = NSPredicate(format: "id == %d", emoticonID)
+		
+		do {
+			return try context.fetch(fetchRequest)
+		} catch {
+			print("Failed to fetch emoticons: \(error)")
+			return []
+		}
+	}
+	
+	//handles deleting or saving an Emoticon from Coredata based on whether its already favorited/saved or not
+	private func toggleFavoriteInCoreData(isFavorited: Bool) {
+		let results = fetchFavoritedEmoticons()
+		
+		if isFavorited {
+			// Save it as a favorite if it doesn't already exist
+			if results.isEmpty {
+				let newFavorite = FavoritedEmoticon(context: context)
+				newFavorite.id = Int32(emoticonID)
+				newFavorite.name = emoticonName
+				newFavorite.imageData = emoticonImage.pngData()
+				didUpdateEmote?()
+				print("Added Emoticon to favorites")
+			}
+		} else {
+			// Remove it from favorites if it exists
+			if let existingFavorite = results.first {
+				context.delete(existingFavorite)
+				didUpdateEmote?()
+				print("Removed Emoticon from favorites")
+			}
+		}
+		
+		// Save changes after add/remove
+		do {
+			try context.save()
+		} catch {
+			print("Failed to save context: \(error)")
+		}
+	}
+
 	
 }

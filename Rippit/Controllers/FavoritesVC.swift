@@ -14,7 +14,6 @@ class FavoritesVC: UIViewController {
 	
 	lazy var savedEmoticons: [FavoritedEmoticon] = [] //These are the saved emoticons to be used on screen
 	
-	
 	lazy var emoticonCollection = EmoticonCollectionView()
 	
 	
@@ -56,6 +55,7 @@ class FavoritesVC: UIViewController {
 		do {
 			let emoticons = try context.fetch(fetchRequest)
 			savedEmoticons = emoticons
+			emoticonCollection.reloadData()
 		} catch {
 			print("Failed to fetch emoticons: \(error)")
 		}
@@ -97,14 +97,23 @@ extension FavoritesVC: UICollectionViewDelegate, UICollectionViewDataSource {
 		return cell
 	}
 	
-	//review
-	//	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-	//
-	//		//Getting the selected emoticon using index path's item; then presenting SelectedEmoticonVC with it
-	//		let selectedEmoticon = savedEmoticons[indexPath.item]
-	//		let emoticonVC = SelectedEmoticonVC(selectedEmoticon: selectedEmoticon)
-	//		self.present(emoticonVC, animated: true)
-	//	}
+	//Did Select Item At function called when a cell is selected
+	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		let selectedEmoticon = savedEmoticons[indexPath.item]
+		
+		// Safely unwrap the name and image
+		if let name = selectedEmoticon.name, let image = selectedEmoticon.image {
+			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: name, image: image)
+			self.present(emoticonVC, animated: true)
+			emoticonVC.didUpdateEmote = { [weak self] in
+				guard let self = self else { return }
+				self.fetchSavedEmoticons()
+			}
+		} else {
+			// Handle the case where the image or name is nil (optional)
+			print("Emoticon name or image is nil.")
+		}
+	}
 	
 	
 }

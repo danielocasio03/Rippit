@@ -271,11 +271,16 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		
-		//Getting the selected emoticon using index path's item; then presenting SelectedEmoticonVC with it
 		let selectedEmoticon = onScreenEmoticons[indexPath.item]
-		let emoticonVC = SelectedEmoticonVC(selectedEmoticon: selectedEmoticon)
-		self.present(emoticonVC, animated: true)
+		
+		// Safely unwrap the image
+		if let image = selectedEmoticon.image {
+			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: selectedEmoticon.name, image: image)
+			self.present(emoticonVC, animated: true)
+		} else {
+			// Handle the case where the image or name is nil (optional)
+			print("Emoticon image is nil.")
+		}
 	}
 	
 	
