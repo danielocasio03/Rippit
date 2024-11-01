@@ -12,22 +12,30 @@ import Foundation
 class HomeVC: UIViewController {
 	
 	//MARK: - Declarations
-		
+	
 	let fetchManager = EmoticonsFetchManager()
+	
+	//This is the collection view that holds all of the emotes
+	lazy var emoticonCollection = EmoticonCollectionView()
+	var emoticonCollectionTopConstraint: NSLayoutConstraint! //Reference to the collectionviews top constraint
+	
+	let searchController = UISearchController(searchResultsController: nil)
 	
 	private var cancellables = Set<AnyCancellable>()
 	
 	var popularEmoticons: [Emoticon] = [] //Storage container for popular emoticons data
-	
 	var newEmoticons: [Emoticon] = [] //Storage container for new emoticons data
-	
+	var searchedEmoticons: [Emoticon] = [] //Storage container for searched emoticons data
 	var onScreenEmoticons: [Emoticon] = [] //This is the array container for the data shown on screen
 	
 	var popularLoadedPage = 0 //Variable used to keep count of the current number of loaded popular Pages. initially zero
-	
 	var newLoadedPage = 0 //Variable used to keep count of the current number of loaded new Pages. initially zero
+	var searchLoadedPage = 0  //Variable used to keep count of the current number of loaded search Pages. initially zero
+	var searchTerm = ""
 	
 	var isFetching = false
+	var morePagesToLoad = true
+	
 	
 	//Button for the Popular Tab
 	lazy var popularButton: CategoryButton = {
@@ -58,12 +66,7 @@ class HomeVC: UIViewController {
 		let barButton = UIBarButtonItem(customView: button)
 		return barButton
 	}()
-
 	
-	//This is the collection view that holds all of the emotes
-	lazy var emoticonCollection = EmoticonCollectionView()
-	var emoticonCollectionTopConstraint: NSLayoutConstraint! //Reference to the collectionviews top constraint
-
 	
 	
 	//MARK: - Life Cycle Methods
@@ -73,8 +76,10 @@ class HomeVC: UIViewController {
 		
 		setupView()
 		setupNavController()
+		setupSearchController()
 		setupCollectionView()
-		fetchEmoticons(category: "popular")
+		fetchEmoticons(category: "popular", searchTerm: nil)
+		
 		
 	}
 	
@@ -92,7 +97,7 @@ class HomeVC: UIViewController {
 		//Emoticon Collection
 		self.view.addSubview(emoticonCollection)
 		emoticonCollectionTopConstraint = emoticonCollection.topAnchor.constraint(equalTo: newButton.bottomAnchor, constant: 10)
-
+		
 		NSLayoutConstraint.activate([
 			//Popular Button
 			popularButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -113,30 +118,13 @@ class HomeVC: UIViewController {
 	}
 	
 	
-	//Function for the general setup of the Nav Controller
-	func setupNavController() {
-		// Set the title for the nav bar
-		self.title = "Rippit"
-		
-		// Customizing the nav Title
-		if let customFont = UIFont(name: "AvenirNext-Bold", size: 24) {
-			navigationController?.navigationBar.titleTextAttributes = [
-				.foregroundColor: DesignManager.shared.navyBlueText,
-					.font: customFont
-			]
-		}
-		navigationItem.rightBarButtonItem = favoriteButton
-		
-	}
-	
-	
 	//MARK: - Action and Helper Methods
 	
 	//Action button for tapped category buttons
 	@objc func categoryButtonTapped(_ sender: CategoryButton) {
 		//Ensuring the tapped button was not already selected
 		guard !sender.isSelected else {return}
-		
+		morePagesToLoad = true
 		//Switch to identify the tapped button and take action from there
 		switch sender {
 		case popularButton:
@@ -145,7 +133,7 @@ class HomeVC: UIViewController {
 			//If statement that checks if the popularEmoticons Page data source already has data. If not, do a fetch before updating the screen, else just update the screen.
 			if popularLoadedPage == 0 {
 				isFetching = true
-				fetchEmoticons(category: "popular")
+				fetchEmoticons(category: "popular", searchTerm: nil)
 			} else {
 				onScreenEmoticons = popularEmoticons
 				DispatchQueue.main.async {
@@ -163,7 +151,7 @@ class HomeVC: UIViewController {
 					self.emoticonCollection.reloadData()
 				}
 				isFetching = true
-				fetchEmoticons(category: "new")
+				fetchEmoticons(category: "new", searchTerm: nil)
 			} else {
 				onScreenEmoticons = newEmoticons
 				DispatchQueue.main.async {
@@ -185,41 +173,48 @@ class HomeVC: UIViewController {
 		
 	}
 	
-	
 	//Method handling the fetch of the Emoticons from the database
-	func fetchEmoticons(category: String) {
+	func fetchEmoticons(category: String, searchTerm: String?) {
 		
 		//Checking which category and page to to fetch for
 		var pageToLoad: Int
 		if category == "popular" {
 			popularLoadedPage += 1
 			pageToLoad = popularLoadedPage
-		} else {
+		} else if category == "new" {
 			newLoadedPage += 1
 			pageToLoad = newLoadedPage
+		} else {
+			searchLoadedPage += 1
+			pageToLoad = searchLoadedPage
 		}
 		
-
-		fetchManager.fetchEmoticons(category: category, pageToLoad: pageToLoad)
+		
+		fetchManager.fetchEmoticons(category: category, searchTerm: searchTerm, pageToLoad: pageToLoad)
 			.sink { completion in
 				print("Emoticons fetch returned with status: \(completion)")
 				self.isFetching = false
 			} receiveValue: { [weak self] data in
 				guard let self = self else {return}
+				morePagesToLoad = !data.isEmpty
 				//Checking the category so we know which data source to update and show
 				if category == "popular" {
 					self.popularEmoticons.append(contentsOf: data) //Appending the results of the fetch to the storage array
 					self.onScreenEmoticons = popularEmoticons
-				} else {
+				} else if category == "new" {
 					self.newEmoticons.append(contentsOf: data)
 					self.onScreenEmoticons = newEmoticons
+				} else {
+					self.searchedEmoticons.append(contentsOf: data)
+					self.onScreenEmoticons = searchedEmoticons
 				}
-					emoticonCollection.reloadData()
+				emoticonCollection.reloadData()
 			}
 			.store(in: &cancellables)
 	}
 	
 }
+
 
 //MARK: - EXT: Collection View
 extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -249,7 +244,7 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	//Cell for Item Method
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell", 
+		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell",
 														  for: indexPath) as! EmoticonCell
 		//Assignment of the image to the cell
 		let imageForCell = onScreenEmoticons[indexPath.item].image
@@ -265,6 +260,9 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 			let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
 																		 withReuseIdentifier: LoadingFooterView.identifier,
 																		 for: indexPath) as! LoadingFooterView
+			footer.spinner.isHidden = !morePagesToLoad
+			footer.noEmoticonsLabel.isHidden = morePagesToLoad
+			
 			return footer
 		}
 		return UICollectionReusableView()
@@ -278,11 +276,56 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: selectedEmoticon.name, image: image)
 			self.present(emoticonVC, animated: true)
 		} else {
-			// Handle the case where the image or name is nil (optional)
+			// Handle the case where the image or name is nil
 			print("Emoticon image is nil.")
 		}
 	}
 	
+	
+}
+
+
+//MARK: - EXT: Search Controller & Navigation Controller
+extension HomeVC: UISearchBarDelegate {
+	
+	//Function for the setup of the Nav Controller
+	func setupNavController() {
+		// Set the title for the nav bar
+		self.title = "Rippit"
+		// Customizing the nav Title
+		if let customFont = UIFont(name: "AvenirNext-Bold", size: 24) {
+			navigationController?.navigationBar.titleTextAttributes = [
+				.foregroundColor: DesignManager.shared.navyBlueText,
+				.font: customFont
+			]
+		}
+		navigationItem.rightBarButtonItem = favoriteButton
+	}
+	
+	//Function for the setup of the Search Controller
+	func setupSearchController() {
+		//Search Controller
+		searchController.searchBar.delegate = self
+		definesPresentationContext = true
+		searchController.obscuresBackgroundDuringPresentation = true
+		searchController.searchBar.placeholder = "Search for emoticons..."
+		navigationItem.searchController = searchController
+	}
+	
+	// Called when return key is tapped, fetching for the typed emoticon
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		morePagesToLoad = true
+		popularButton.isSelected = false
+		newButton.isSelected = false
+		searchedEmoticons = []
+		searchLoadedPage = 0
+		if let safeSearch = searchBar.text {
+			searchTerm = safeSearch
+		}
+		print(searchTerm)
+		fetchEmoticons(category: "search", searchTerm: searchTerm)
+
+	}
 	
 }
 
@@ -319,14 +362,17 @@ extension HomeVC: UIScrollViewDelegate {
 		let contentHeight = scrollView.contentSize.height
 		let scrollViewHeight = scrollView.frame.size.height
 		let threshold = contentHeight - scrollViewHeight - 700
-		if scrollView.contentOffset.y > threshold && scrollView.isDragging && !isFetching {
-			isFetching = true
-			//Checking which page we are currently on so we know which to fetch for
-			if popularButton.isSelected {
-				fetchEmoticons(category: "popular")
-			} else {
-				fetchEmoticons(category: "new")
-			}
+		if scrollView.contentOffset.y > threshold && scrollView.isDragging && !isFetching && morePagesToLoad {
+				isFetching = true
+				//Checking which page we are currently on so we know which to fetch for
+				if popularButton.isSelected {
+					fetchEmoticons(category: "popular", searchTerm: nil)
+				} else if popularButton.isSelected {
+					fetchEmoticons(category: "new", searchTerm: nil)
+				} else {
+					fetchEmoticons(category: "search", searchTerm: searchTerm)
+				}
+			
 			
 		}
 		

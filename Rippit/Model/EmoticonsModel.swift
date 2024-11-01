@@ -53,9 +53,15 @@ struct Emoticon: Codable {
 
 struct Urls: Codable {
 	
-	let url4: String
+	let url1: String
+	
+	let url2: String?
+	
+	let url4: String?
 	
 	enum CodingKeys: String, CodingKey {
+		case url1 = "1"
+		case url2 = "2"
 		case url4 = "4"
 	}
 }

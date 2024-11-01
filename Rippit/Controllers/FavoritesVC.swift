@@ -15,6 +15,17 @@ class FavoritesVC: UIViewController {
 	lazy var savedEmoticons: [FavoritedEmoticon] = [] //These are the saved emoticons to be used on screen
 	
 	lazy var emoticonCollection = EmoticonCollectionView()
+		
+	private let noEmoticonsLabel: UILabel = {
+		let label = UILabel()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.isHidden = true
+		label.text = "Much Emptiness 😢 Such Sad"
+		label.textAlignment = .center
+		label.font = UIFont(name: "AvenirNext-Bold", size: 17)
+		label.textColor = .gray
+		return label
+	}()
 	
 	
 	//MARK: - Override and Init
@@ -35,15 +46,21 @@ class FavoritesVC: UIViewController {
 	func setupView() {
 		//Self
 		self.view.backgroundColor = DesignManager.shared.lightBgColor
+		self.title = "Saved Emoticons"
 		//Emoticon Collection
 		self.view.addSubview(emoticonCollection)
+		//noEmoticonLabel
+		view.addSubview(noEmoticonsLabel)
 		
 		NSLayoutConstraint.activate([
 			//Emoticon Collection
 			emoticonCollection.topAnchor.constraint(equalTo: view.topAnchor),
 			emoticonCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
 			emoticonCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-			emoticonCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+			emoticonCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+			//noEmoticonLabel
+			noEmoticonsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			noEmoticonsLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 		])
 	}
 	
@@ -56,6 +73,7 @@ class FavoritesVC: UIViewController {
 			let emoticons = try context.fetch(fetchRequest)
 			savedEmoticons = emoticons
 			emoticonCollection.reloadData()
+			noEmoticonsLabel.isHidden = !savedEmoticons.isEmpty
 		} catch {
 			print("Failed to fetch emoticons: \(error)")
 		}
@@ -110,7 +128,7 @@ extension FavoritesVC: UICollectionViewDelegate, UICollectionViewDataSource {
 				self.fetchSavedEmoticons()
 			}
 		} else {
-			// Handle the case where the image or name is nil (optional)
+			// Handle the case where the image or name is nil
 			print("Emoticon name or image is nil.")
 		}
 	}

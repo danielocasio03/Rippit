@@ -21,14 +21,16 @@ class EmoticonsFetchManager {
 	//MARK: - Fetch Methods
 	
 	//Function that fetches the database for its Emoticons data, returns array of type [Emoticon] or a fetch error in case of failure
-	func fetchEmoticons(category: String, pageToLoad: Int) -> AnyPublisher<[Emoticon], EmoticonsFetchErrors> {
+	func fetchEmoticons(category: String, searchTerm: String?, pageToLoad: Int) -> AnyPublisher<[Emoticon], EmoticonsFetchErrors> {
 		
 		//checking which category the fetch is for so we know which URL to use
 		let urlString: String
 		if category == "popular" {
 			urlString = "https://api.frankerfacez.com/v1/emoticons?page=\(pageToLoad)&sort=count-desc#"
-		} else {
+		} else if category == "new" {
 			urlString = "https://api.frankerfacez.com/v1/emoticons?page=\(pageToLoad)&sort=created-desc#"
+		} else {
+			urlString = "https://api.frankerfacez.com/v1/emoticons?q=\(searchTerm ?? "")&page=\(pageToLoad)"
 		}
 				
 		//unwrapping url string to URL object
@@ -56,7 +58,8 @@ class EmoticonsFetchManager {
 	// Helper method to download images for all emoticons; returns array of Emoticons now with the image in place.
 	private func downloadImages(for emoticons: [Emoticon]) -> AnyPublisher<[Emoticon], Never> {
 		let publishers = emoticons.map { emoticon in
-			self.downloadSingleImage(from: emoticon.urls.url4)
+			let selectedUrl = emoticon.urls.url4 ?? emoticon.urls.url2 ?? emoticon.urls.url1
+			return self.downloadSingleImage(from: selectedUrl)
 				.map { image in
 					var emoticonWithImage = emoticon
 					emoticonWithImage.image = image
@@ -64,7 +67,7 @@ class EmoticonsFetchManager {
 				}
 				.eraseToAnyPublisher()
 		}
-		//Merges each of the emoticon Publishers that now have images back into one Publisher; [Emoticons]
+		// Merges each of the emoticon Publishers that now have images back into one Publisher; [Emoticons]
 		return Publishers.MergeMany(publishers)
 			.collect()
 			.eraseToAnyPublisher()
