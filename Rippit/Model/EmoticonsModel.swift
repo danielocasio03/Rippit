@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Combine
+import Messages
 
 struct EmoticonsModel {
 	let emoticonsResponse: EmoticonsResponse
@@ -37,14 +38,16 @@ struct Emoticon: Codable {
 	
 	let urls: Urls
 	
+	let animated: animatedUrls?
+	
 	let createdAt: String
 	
 	let lastUpdated: String
 	
-	var image: UIImage? = nil
+	var sticker: MSSticker? = nil
 
 	enum CodingKeys: String, CodingKey {
-		case id, name, urls
+		case id, name, urls, animated
 		case createdAt = "created_at"
 		case lastUpdated = "last_updated"
 	}
@@ -64,4 +67,20 @@ struct Urls: Codable {
 		case url2 = "2"
 		case url4 = "4"
 	}
+}
+
+struct animatedUrls: Codable {
+	
+	let animatedurl1: String?
+	
+	let animatedurl2: String?
+	
+	let animatedurl3: String?
+	
+	enum CodingKeys: String, CodingKey {
+		case animatedurl1 = "1"
+		case animatedurl2 = "2"
+		case animatedurl3 = "4"
+	}
+	
 }

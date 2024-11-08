@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 import Foundation
+import Messages
 
 class HomeVC: UIViewController {
 	
@@ -246,9 +247,10 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell",
 														  for: indexPath) as! EmoticonCell
-		//Assignment of the image to the cell
-		let imageForCell = onScreenEmoticons[indexPath.item].image
-		cell.EmoticonImage.image = imageForCell
+		//Assignment of the sticker to the cell
+		let imageForCell = onScreenEmoticons[indexPath.item].sticker
+		cell.EmoticonSticker.sticker = imageForCell
+		cell.EmoticonSticker.sizeToFit()
 		
 		return cell
 	}
@@ -268,17 +270,18 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 		return UICollectionReusableView()
 	}
 	
+	
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let selectedEmoticon = onScreenEmoticons[indexPath.item]
 		
-		// Safely unwrap the image
-		if let image = selectedEmoticon.image {
-			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: selectedEmoticon.name, image: image)
-			self.present(emoticonVC, animated: true)
-		} else {
-			// Handle the case where the image or name is nil
-			print("Emoticon image is nil.")
-		}
+//		// Safely unwrap the sticker
+//		if let image = selectedEmoticon.sticker {
+//			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: selectedEmoticon.name, image: image)
+//			self.present(emoticonVC, animated: true)
+//		} else {
+//			// Handle the case where the image or name is nil
+//			print("Emoticon image is nil.")
+//		}
 	}
 	
 	

@@ -110,7 +110,7 @@ extension FavoritesVC: UICollectionViewDelegate, UICollectionViewDataSource {
 														  for: indexPath) as! EmoticonCell
 		//Assignment of the image to the cell
 		let imageForCell = savedEmoticons[indexPath.item].image
-		cell.EmoticonImage.image = imageForCell
+//		cell.EmoticonSticker.image = imageForCell
 		
 		return cell
 	}

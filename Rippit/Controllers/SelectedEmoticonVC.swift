@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 import CoreData
+import ImageIO
+import UniformTypeIdentifiers
 
 class SelectedEmoticonVC: UIViewController {
 	
@@ -180,12 +182,22 @@ class SelectedEmoticonVC: UIViewController {
 		toggleFavoriteInCoreData(isFavorited: favoriteButton.isSelected)
 	}
 	
-	//Action function called when the favorites button is tapped
+	//Action function called when the favorites button is tapped //review
 	@objc func copyTapped() {
-		UIPasteboard.general.image = emoticonImage // Copies image to the clipboard
-		let alert = UIAlertController(title: "Copied!", message: "The emoticon has been copied to your clipboard.", preferredStyle: .alert)
-		alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-		present(alert, animated: true, completion: nil)
+		if let animatedData = emoticonImage.toGIFData() {
+			// Copy GIF data to the clipboard
+			UIPasteboard.general.setData(animatedData, forPasteboardType: "com.compuserve.gif")
+			
+			let alert = UIAlertController(title: "Copied!", message: "The animated emoticon has been copied to your clipboard.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+			present(alert, animated: true, completion: nil)
+		} else {
+			// Copy static image directly if not animated
+			UIPasteboard.general.image = emoticonImage
+			let alert = UIAlertController(title: "Copied!", message: "The emoticon has been copied to your clipboard.", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+			present(alert, animated: true, completion: nil)
+		}
 	}
 	
 	
@@ -241,4 +253,43 @@ class SelectedEmoticonVC: UIViewController {
 	}
 
 	
+}
+
+
+//Review
+extension UIImage {
+	
+	//This is an extension method to UIImage that converts imamges into animated images
+	func toGIFData() -> Data? {
+		guard let images = self.images, images.count > 1 else {
+			return nil // Only proceed if it's an animated UIImage
+		}
+		
+		let frameDelay = self.duration / Double(images.count)
+		
+		let data = NSMutableData()
+		
+		guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, UTType.gif.identifier as CFString, images.count, nil) else {
+			return nil
+		}
+		
+		let properties = [kCGImagePropertyGIFDictionary: [
+			kCGImagePropertyGIFLoopCount: 0 // Loop indefinitely
+		]]
+		CGImageDestinationSetProperties(destination, properties as CFDictionary)
+		
+		for image in images {
+			guard let cgImage = image.cgImage else { continue }
+			let frameProperties = [kCGImagePropertyGIFDictionary: [
+				kCGImagePropertyGIFDelayTime: frameDelay
+			]]
+			CGImageDestinationAddImage(destination, cgImage, frameProperties as CFDictionary)
+		}
+		
+		if CGImageDestinationFinalize(destination) {
+			return data as Data
+		} else {
+			return nil
+		}
+	}
 }

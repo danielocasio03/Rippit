@@ -7,21 +7,29 @@
 
 import Foundation
 import UIKit
+import Messages
 
 class EmoticonCell: UICollectionViewCell {
 	
 	//MARK: - Declarations
 	
 	//Emoticon image
-	lazy var EmoticonImage: UIImageView = {
-		let image = UIImageView()
-		image.translatesAutoresizingMaskIntoConstraints = false
-		image.contentMode = .scaleAspectFit
-		image.clipsToBounds = true
+//	lazy var EmoticonImage: UIImageView = {
+//		let image = UIImageView()
+//		image.translatesAutoresizingMaskIntoConstraints = false
+//		image.contentMode = .scaleAspectFit
+//		image.clipsToBounds = true
+//		
+//		return image
+//	}()
+	lazy var EmoticonSticker: MSStickerView = {
+		let sticker = MSStickerView()
+		sticker.translatesAutoresizingMaskIntoConstraints = false
+		sticker.contentMode = .scaleAspectFit
+		sticker.clipsToBounds = true
 		
-		return image
+		return sticker
 	}()
-	
 	
 	//MARK: - Override
 	
@@ -46,13 +54,13 @@ class EmoticonCell: UICollectionViewCell {
 		layer.shadowRadius = 5
 		
 		//Emoticon Image
-		self.addSubview(EmoticonImage)
+		self.addSubview(EmoticonSticker)
 		
 		NSLayoutConstraint.activate([
 			//Emoticon Image
-			EmoticonImage.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-			EmoticonImage.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-			EmoticonImage.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.60)
+			EmoticonSticker.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+			EmoticonSticker.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+			EmoticonSticker.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.60)
 		])
 		
 	}
