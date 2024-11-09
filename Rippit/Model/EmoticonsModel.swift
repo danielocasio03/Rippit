@@ -45,6 +45,8 @@ struct Emoticon: Codable {
 	let lastUpdated: String
 	
 	var sticker: MSSticker? = nil
+	
+	var isAnimated: Bool?
 
 	enum CodingKeys: String, CodingKey {
 		case id, name, urls, animated

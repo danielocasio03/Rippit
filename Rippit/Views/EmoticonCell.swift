@@ -12,16 +12,7 @@ import Messages
 class EmoticonCell: UICollectionViewCell {
 	
 	//MARK: - Declarations
-	
-	//Emoticon image
-//	lazy var EmoticonImage: UIImageView = {
-//		let image = UIImageView()
-//		image.translatesAutoresizingMaskIntoConstraints = false
-//		image.contentMode = .scaleAspectFit
-//		image.clipsToBounds = true
-//		
-//		return image
-//	}()
+
 	lazy var EmoticonSticker: MSStickerView = {
 		let sticker = MSStickerView()
 		sticker.translatesAutoresizingMaskIntoConstraints = false
@@ -53,14 +44,17 @@ class EmoticonCell: UICollectionViewCell {
 		layer.shadowOffset = CGSize(width: -2, height: 2)
 		layer.shadowRadius = 5
 		
-		//Emoticon Image
-		self.addSubview(EmoticonSticker)
+		//Emoticon sticker
+		self.contentView.addSubview(EmoticonSticker)
+		self.contentView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 		
 		NSLayoutConstraint.activate([
-			//Emoticon Image
-			EmoticonSticker.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-			EmoticonSticker.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-			EmoticonSticker.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.60)
+			//Emoticon sticker
+			EmoticonSticker.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
+			EmoticonSticker.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
+			EmoticonSticker.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
+			EmoticonSticker.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor)
+
 		])
 		
 	}

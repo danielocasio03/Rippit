@@ -220,16 +220,9 @@ class EmoticonsFetchManager {
 	
 	// MARK: - Private Helper Methods
 	
-	// Helper method that takes emoticons and begins downloading stickers for each.
 	private func downloadAllStickers(for emoticons: [Emoticon]) -> AnyPublisher<[Emoticon], Never> {
 		let publishers = emoticons.map { emoticon in
 			self.downloadSticker(for: emoticon)
-				.map { sticker in
-					var emoticonWithSticker = emoticon
-					emoticonWithSticker.sticker = sticker
-					return emoticonWithSticker
-				}
-				.eraseToAnyPublisher()
 		}
 		
 		return Publishers.MergeMany(publishers)
@@ -237,25 +230,36 @@ class EmoticonsFetchManager {
 			.eraseToAnyPublisher()
 	}
 	
+	
 	// Determines the best URL to download as an `MSSticker` (animated or static) based on availability.
-	private func downloadSticker(for emoticon: Emoticon) -> AnyPublisher<MSSticker?, Never> {
-		// First check for animated URLs
+	private func downloadSticker(for emoticon: Emoticon) -> AnyPublisher<Emoticon, Never> {
 		var urlString: String
 		var fileType: String
+		var emoticonCopy = emoticon  // Create a copy to modify properties
 		
+		// Check for animated URLs
 		if let animatedUrl = emoticon.animated?.animatedurl3 ?? emoticon.animated?.animatedurl2 ?? emoticon.animated?.animatedurl1 {
 			urlString = animatedUrl
 			fileType = "gif"  // Animated URL should be a gif
+			emoticonCopy.isAnimated = true  // Set isAnimated to true
 		} else {
+			// Default to static URLs
 			urlString = emoticon.urls.url4 ?? emoticon.urls.url2 ?? emoticon.urls.url1
 			fileType = "png"  // Static URL should be a png
+			emoticonCopy.isAnimated = false  // Set isAnimated to false
 		}
 		
 		guard let url = URL(string: urlString) else {
-			return Just(nil).eraseToAnyPublisher()
+			return Just(emoticonCopy).eraseToAnyPublisher()
 		}
 		
 		return createSticker(url: url, id: emoticon.id, fileType: fileType)
+			.map { sticker in
+				var updatedEmoticon = emoticonCopy
+				updatedEmoticon.sticker = sticker
+				return updatedEmoticon
+			}
+			.eraseToAnyPublisher()
 	}
 	
 	// Download the image as an `MSSticker`.

@@ -245,12 +245,19 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	//Cell for Item Method
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		//review
 		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell",
 														  for: indexPath) as! EmoticonCell
 		//Assignment of the sticker to the cell
-		let imageForCell = onScreenEmoticons[indexPath.item].sticker
-		cell.EmoticonSticker.sticker = imageForCell
+		let emoticonForCell = onScreenEmoticons[indexPath.item]
+		
+		cell.EmoticonSticker.sticker = emoticonForCell.sticker
 		cell.EmoticonSticker.sizeToFit()
+
+		if emoticonForCell.isAnimated ?? false {
+			cell.EmoticonSticker.startAnimating()
+		}
+		
 		
 		return cell
 	}
