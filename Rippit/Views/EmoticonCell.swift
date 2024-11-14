@@ -13,22 +13,13 @@ class EmoticonCell: UICollectionViewCell {
 	
 	//MARK: - Declarations
 
-	lazy var EmoticonSticker: MSStickerView = {
-		let sticker = MSStickerView()
-		sticker.translatesAutoresizingMaskIntoConstraints = false
-		sticker.contentMode = .scaleAspectFit
-		sticker.clipsToBounds = true
-		
-		return sticker
-	}()
+	lazy var emoticonStickerView = FFZStickerView()
 	
 	//MARK: - Override
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-		
 		setupCell()
-		
 	}
 	
 	
@@ -45,15 +36,15 @@ class EmoticonCell: UICollectionViewCell {
 		layer.shadowRadius = 5
 		
 		//Emoticon sticker
-		self.contentView.addSubview(EmoticonSticker)
+		self.contentView.addSubview(emoticonStickerView)
 		self.contentView.layoutMargins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 		
 		NSLayoutConstraint.activate([
 			//Emoticon sticker
-			EmoticonSticker.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-			EmoticonSticker.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
-			EmoticonSticker.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
-			EmoticonSticker.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor)
+			emoticonStickerView.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
+			emoticonStickerView.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
+			emoticonStickerView.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
+			emoticonStickerView.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor)
 
 		])
 		
@@ -65,5 +56,44 @@ class EmoticonCell: UICollectionViewCell {
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
+	
+}
+
+//Custom Sticker view class with tap methods
+public class FFZStickerView: MSStickerView {
+	
+	//Call back closure for handling tap actions
+	public typealias OnInteraction = () -> Void
+		
+	var onTap: OnInteraction?
+		
+	init() {
+		super.init(frame: .zero)
+		// General setup
+		contentMode = .scaleAspectFit
+		translatesAutoresizingMaskIntoConstraints = false
+		clipsToBounds = true
+		
+		//Adding gesture recognizer for tap
+		let tapped = UITapGestureRecognizer(target: self, action: #selector(stickerTapped))
+		self.addGestureRecognizer(tapped)
+		
+	}
+	
+	//Tap action method
+	@objc func stickerTapped() {
+		onTap?()
+	}
+	
+	//Tap action method
+	public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		onTap?()
+	}
+	
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	
 }

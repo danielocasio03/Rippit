@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import ImageIO
 import UniformTypeIdentifiers
+import Messages
 
 class SelectedEmoticonVC: UIViewController {
 	
@@ -19,21 +20,26 @@ class SelectedEmoticonVC: UIViewController {
 	
 	var emoticonName: String
 	
-	var emoticonImage: UIImage
+	var emoticonSticker: MSSticker
+	
+	var isEmoticonAnimated: Bool
 	
 	var didUpdateEmote: (() -> Void)?
 		
 	//Reference to coredata persistent container
 	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 	
-	//Image for the Emoticon
-	lazy var emoticonImageView: UIImageView = {
-		let image = UIImageView()
-		image.translatesAutoresizingMaskIntoConstraints = false
-		image.contentMode = .scaleAspectFit
-		image.image = emoticonImage
-
-		return image
+	//sticker for the Emoticon
+	lazy var emoticonStickerView: MSStickerView = {
+		let sticker = MSStickerView()
+		sticker.translatesAutoresizingMaskIntoConstraints = false
+		sticker.contentMode = .scaleAspectFit
+		sticker.sticker = emoticonSticker
+		if isEmoticonAnimated {
+			sticker.startAnimating()
+		}
+		
+		return sticker
 	}()
 	
 	
@@ -56,7 +62,7 @@ class SelectedEmoticonVC: UIViewController {
 		return label
 	}()
 	
-	//Button for copying the selected image
+	//Button for copying the selected sticker
 	lazy var copyButton: UIButton = {
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +76,7 @@ class SelectedEmoticonVC: UIViewController {
 		return button
 	}()
 	
+	
 	lazy var favoriteButton: FavoriteButton = {
 		
 		let button = FavoriteButton(frame: .zero, color: DesignManager.shared.lightBgColor)
@@ -80,17 +87,16 @@ class SelectedEmoticonVC: UIViewController {
 	}()
 	
 	
-
-	
 	
 	//MARK: -  Init and Override
 	
 	//Custom Initializer for taking in the selected Emoticons Data; then assigning injected data to our local variable
-	init(id: Int, name: String, image: UIImage) {
+	init(id: Int, name: String, sticker: MSSticker, isAnimated: Bool) {
 		
 		self.emoticonID = id
 		self.emoticonName = name
-		self.emoticonImage = image
+		self.emoticonSticker = sticker
+		self.isEmoticonAnimated = isAnimated
 		super.init(nibName: nil, bundle: nil)
 		
 	}
@@ -127,8 +133,8 @@ class SelectedEmoticonVC: UIViewController {
 		
 		//ContainerView
 		view.addSubview(containerView)
-		//Emoticon Image
-		view.addSubview(emoticonImageView)
+		//Emoticon sticker
+		view.addSubview(emoticonStickerView)
 
 
 		NSLayoutConstraint.activate([
@@ -137,11 +143,11 @@ class SelectedEmoticonVC: UIViewController {
 			containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 			containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-			//Emoticon Image
-			emoticonImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			emoticonImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-			emoticonImageView.bottomAnchor.constraint(equalTo: containerView.topAnchor),
-			emoticonImageView.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.40),
+			//Emoticon sticker
+			emoticonStickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+			emoticonStickerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+			emoticonStickerView.bottomAnchor.constraint(equalTo: containerView.topAnchor),
+			emoticonStickerView.widthAnchor.constraint(greaterThanOrEqualTo: view.widthAnchor, multiplier: 0.40),
 		])
 	}
 	
@@ -182,22 +188,25 @@ class SelectedEmoticonVC: UIViewController {
 		toggleFavoriteInCoreData(isFavorited: favoriteButton.isSelected)
 	}
 	
-	//Action function called when the favorites button is tapped //review
+	//Action function called when the favorites button is tapped
 	@objc func copyTapped() {
-		if let animatedData = emoticonImage.toGIFData() {
-			// Copy GIF data to the clipboard
-			UIPasteboard.general.setData(animatedData, forPasteboardType: "com.compuserve.gif")
+		let imageFileURL = emoticonSticker.imageFileURL
+		
+		do {
+			// Load the image data from the file URL
+			let imageData = try Data(contentsOf: imageFileURL)
 			
+			// Copy the image data to the clipboard
+			UIPasteboard.general.setData(imageData, forPasteboardType: UTType.png.identifier)
+			
+			// Show an alert confirming the copy
 			let alert = UIAlertController(title: "Copied!", message: "The animated emoticon has been copied to your clipboard.", preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 			present(alert, animated: true, completion: nil)
-		} else {
-			// Copy static image directly if not animated
-			UIPasteboard.general.image = emoticonImage
-			let alert = UIAlertController(title: "Copied!", message: "The emoticon has been copied to your clipboard.", preferredStyle: .alert)
-			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-			present(alert, animated: true, completion: nil)
+		} catch {
+			print("Failed to load image data from sticker: \(error)")
 		}
+
 	}
 	
 	
@@ -231,9 +240,19 @@ class SelectedEmoticonVC: UIViewController {
 				let newFavorite = FavoritedEmoticon(context: context)
 				newFavorite.id = Int32(emoticonID)
 				newFavorite.name = emoticonName
-				newFavorite.imageData = emoticonImage.pngData()
-				didUpdateEmote?()
-				print("Added Emoticon to favorites")
+				newFavorite.isAnimated = isEmoticonAnimated
+				
+				do {
+					// Convert the sticker's image URL to Data
+					let imageData = try Data(contentsOf: emoticonSticker.imageFileURL)
+					newFavorite.imageData = imageData // Store the binary data in Core Data
+					
+					didUpdateEmote?()
+					print("Added Emoticon to favorites")
+					
+				} catch {
+					print("Failed to load image data for saving: \(error)")
+				}
 			}
 		} else {
 			// Remove it from favorites if it exists
@@ -244,7 +263,7 @@ class SelectedEmoticonVC: UIViewController {
 			}
 		}
 		
-		// Save changes after add/remove
+		// Save changes
 		do {
 			try context.save()
 		} catch {
@@ -256,40 +275,3 @@ class SelectedEmoticonVC: UIViewController {
 }
 
 
-//Review
-extension UIImage {
-	
-	//This is an extension method to UIImage that converts imamges into animated images
-	func toGIFData() -> Data? {
-		guard let images = self.images, images.count > 1 else {
-			return nil // Only proceed if it's an animated UIImage
-		}
-		
-		let frameDelay = self.duration / Double(images.count)
-		
-		let data = NSMutableData()
-		
-		guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, UTType.gif.identifier as CFString, images.count, nil) else {
-			return nil
-		}
-		
-		let properties = [kCGImagePropertyGIFDictionary: [
-			kCGImagePropertyGIFLoopCount: 0 // Loop indefinitely
-		]]
-		CGImageDestinationSetProperties(destination, properties as CFDictionary)
-		
-		for image in images {
-			guard let cgImage = image.cgImage else { continue }
-			let frameProperties = [kCGImagePropertyGIFDictionary: [
-				kCGImagePropertyGIFDelayTime: frameDelay
-			]]
-			CGImageDestinationAddImage(destination, cgImage, frameProperties as CFDictionary)
-		}
-		
-		if CGImageDestinationFinalize(destination) {
-			return data as Data
-		} else {
-			return nil
-		}
-	}
-}

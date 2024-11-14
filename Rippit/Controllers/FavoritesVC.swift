@@ -78,7 +78,6 @@ class FavoritesVC: UIViewController {
 			print("Failed to fetch emoticons: \(error)")
 		}
 	}
-	
 }
 
 
@@ -108,30 +107,33 @@ extension FavoritesVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell",
 														  for: indexPath) as! EmoticonCell
-		//Assignment of the image to the cell
-		let imageForCell = savedEmoticons[indexPath.item].image
-//		cell.EmoticonSticker.image = imageForCell
+		//Assignment of the sticker to the cell
+		let emoticonForCell = savedEmoticons[indexPath.item]
+		cell.emoticonStickerView.sticker = emoticonForCell.sticker
+		
+		//Animating if this is an animated emoticon
+		if emoticonForCell.isAnimated {
+			cell.emoticonStickerView.startAnimating()
+		}
+		
+		//Method in charge of adding in the functionality of tapped stickers
+		cell.emoticonStickerView.onTap = { [weak self] in
+			guard let self = self else {return}
+			// Safely unwrap the name and sticker
+			if let name = emoticonForCell.name, let sticker = emoticonForCell.sticker {
+				let emoticonVC = SelectedEmoticonVC(id: Int(emoticonForCell.id), name: name, sticker: sticker, isAnimated: emoticonForCell.isAnimated) // Create Selected Emoticon VC
+				self.present(emoticonVC, animated: true) // Present
+				//Defining Method in charge of updating view if user unsaves an emoticon
+				emoticonVC.didUpdateEmote = { [weak self] in
+					guard let self = self else { return }
+					self.fetchSavedEmoticons()
+				}
+			} else {
+				print("Emoticon name or sticker is nil.") // Handle the case where the sticker or name is nil
+			}
+		}
 		
 		return cell
 	}
-	
-	//Did Select Item At function called when a cell is selected
-	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		let selectedEmoticon = savedEmoticons[indexPath.item]
-		
-		// Safely unwrap the name and image
-		if let name = selectedEmoticon.name, let image = selectedEmoticon.image {
-			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: name, image: image)
-			self.present(emoticonVC, animated: true)
-			emoticonVC.didUpdateEmote = { [weak self] in
-				guard let self = self else { return }
-				self.fetchSavedEmoticons()
-			}
-		} else {
-			// Handle the case where the image or name is nil
-			print("Emoticon name or image is nil.")
-		}
-	}
-	
 	
 }

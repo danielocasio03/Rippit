@@ -245,19 +245,29 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 	
 	//Cell for Item Method
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-		//review
 		let cell = emoticonCollection.dequeueReusableCell(withReuseIdentifier: "cell",
 														  for: indexPath) as! EmoticonCell
 		//Assignment of the sticker to the cell
 		let emoticonForCell = onScreenEmoticons[indexPath.item]
-		
-		cell.EmoticonSticker.sticker = emoticonForCell.sticker
-		cell.EmoticonSticker.sizeToFit()
-
-		if emoticonForCell.isAnimated ?? false {
-			cell.EmoticonSticker.startAnimating()
+		cell.emoticonStickerView.sticker = emoticonForCell.sticker
+		cell.emoticonStickerView.sizeToFit()
+		//Starting animation of emoticon if it is animated
+		if emoticonForCell.isAnimated {
+			cell.emoticonStickerView.startAnimating()
 		}
 		
+		//Method in charge of adding in the functionality of tapped stickers
+		cell.emoticonStickerView.onTap = { [weak self] in
+			guard let self = self else {return}
+			// Safely unwrap the sticker
+			if let sticker = emoticonForCell.sticker {
+				let emoticonVC = SelectedEmoticonVC(id: Int(emoticonForCell.id), name: emoticonForCell.name, sticker: sticker, isAnimated: emoticonForCell.isAnimated) // Create Selected Emoticon VC
+				self.present(emoticonVC, animated: true) // Present
+			} else {
+				// Handle the case where the sticker or name is nil
+				print("Emoticon sticker is nil.")
+			}
+		}
 		
 		return cell
 	}
@@ -276,21 +286,6 @@ extension HomeVC: UICollectionViewDelegate, UICollectionViewDataSource {
 		}
 		return UICollectionReusableView()
 	}
-	
-	
-	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-		let selectedEmoticon = onScreenEmoticons[indexPath.item]
-		
-//		// Safely unwrap the sticker
-//		if let image = selectedEmoticon.sticker {
-//			let emoticonVC = SelectedEmoticonVC(id: Int(selectedEmoticon.id), name: selectedEmoticon.name, image: image)
-//			self.present(emoticonVC, animated: true)
-//		} else {
-//			// Handle the case where the image or name is nil
-//			print("Emoticon image is nil.")
-//		}
-	}
-	
 	
 }
 
