@@ -190,26 +190,35 @@ class HomeVC: UIViewController {
 			pageToLoad = searchLoadedPage
 		}
 		
+		print("Beginning fetch for category: \(category), page: \(pageToLoad)")
 		
 		fetchManager.fetchEmoticons(category: category, searchTerm: searchTerm, pageToLoad: pageToLoad)
 			.sink { completion in
-				print("Emoticons fetch returned with status: \(completion)")
+				print("Emoticons fetch for \(category), Page: \(pageToLoad) returned with status: \(completion)")
 				self.isFetching = false
 			} receiveValue: { [weak self] data in
 				guard let self = self else {return}
 				morePagesToLoad = !data.isEmpty
-				//Checking the category so we know which data source to update and show
+				// Append fetched data to the respective storage array
 				if category == "popular" {
-					self.popularEmoticons.append(contentsOf: data) //Appending the results of the fetch to the storage array
-					self.onScreenEmoticons = popularEmoticons
+					self.popularEmoticons.append(contentsOf: data)
 				} else if category == "new" {
 					self.newEmoticons.append(contentsOf: data)
-					self.onScreenEmoticons = newEmoticons
 				} else {
 					self.searchedEmoticons.append(contentsOf: data)
-					self.onScreenEmoticons = searchedEmoticons
 				}
-				emoticonCollection.reloadData()
+				
+				// Only update onScreenEmoticons if the respective category button is selected
+				if category == "popular", self.popularButton.isSelected {
+					self.onScreenEmoticons = self.popularEmoticons
+				} else if category == "new", self.newButton.isSelected {
+					self.onScreenEmoticons = self.newEmoticons
+				} else {
+					self.onScreenEmoticons = self.searchedEmoticons
+				}
+				
+				// Reload collection view to update UI
+				self.emoticonCollection.reloadData()
 			}
 			.store(in: &cancellables)
 	}
@@ -305,6 +314,7 @@ extension HomeVC: UISearchBarDelegate {
 			]
 		}
 		navigationItem.rightBarButtonItem = favoriteButton
+		navigationController?.navigationBar.overrideUserInterfaceStyle = .light
 	}
 	
 	//Function for the setup of the Search Controller
@@ -325,11 +335,17 @@ extension HomeVC: UISearchBarDelegate {
 		searchedEmoticons = []
 		searchLoadedPage = 0
 		if let safeSearch = searchBar.text {
-			searchTerm = safeSearch
+			searchTerm = safeSearch.replacingOccurrences(of: " ", with: "")
+		} else {
+			let alert = UIAlertController(title: "Search Failed", message: "Please enter a valid search term", preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+			present(alert, animated: true, completion: nil)
 		}
+		
+		searchController.isActive = false
+		
 		print(searchTerm)
 		fetchEmoticons(category: "search", searchTerm: searchTerm)
-
 	}
 	
 }
@@ -372,7 +388,7 @@ extension HomeVC: UIScrollViewDelegate {
 				//Checking which page we are currently on so we know which to fetch for
 				if popularButton.isSelected {
 					fetchEmoticons(category: "popular", searchTerm: nil)
-				} else if popularButton.isSelected {
+				} else if newButton.isSelected {
 					fetchEmoticons(category: "new", searchTerm: nil)
 				} else {
 					fetchEmoticons(category: "search", searchTerm: searchTerm)

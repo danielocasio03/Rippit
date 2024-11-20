@@ -188,29 +188,71 @@ class SelectedEmoticonVC: UIViewController {
 		toggleFavoriteInCoreData(isFavorited: favoriteButton.isSelected)
 	}
 	
+	
 	//Action function called when the favorites button is tapped
 	@objc func copyTapped() {
 		let imageFileURL = emoticonSticker.imageFileURL
+		let imageToCopy: Data
+		var fileType: String
 		
 		do {
 			// Load the image data from the file URL
 			let imageData = try Data(contentsOf: imageFileURL)
+			guard let image = UIImage(data: imageData) else {return}
+			
+			if isEmoticonAnimated {
+				imageToCopy = imageData
+				fileType = UTType.gif.identifier
+			} else {
+				imageToCopy = resizeImage(image) //Resizing the image to a more suitable size for imessage
+				fileType = UTType.png.identifier
+			}
 			
 			// Copy the image data to the clipboard
-			UIPasteboard.general.setData(imageData, forPasteboardType: UTType.png.identifier)
+			UIPasteboard.general.setData(imageToCopy, forPasteboardType: fileType)
 			
 			// Show an alert confirming the copy
-			let alert = UIAlertController(title: "Copied!", message: "The animated emoticon has been copied to your clipboard.", preferredStyle: .alert)
+			let alert = UIAlertController(title: "Copied!", message: "The emoticon is copied and ready to paste", preferredStyle: .alert)
 			alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
 			present(alert, animated: true, completion: nil)
 		} catch {
 			print("Failed to load image data from sticker: \(error)")
 		}
-
+		
 	}
 	
 	
 	//MARK: - Helper Methods
+	
+	// Helper function to resize a static image while maintaining the aspect ratio
+	func resizeImage(_ image: UIImage) -> Data {
+		let maxDimension: CGFloat = 180
+		
+		// Get the original image's size
+		let originalSize = image.size
+		
+		// Calculate the scaling factor to maintain aspect ratio
+		let scaleFactor = min(maxDimension / originalSize.width, maxDimension / originalSize.height)
+		
+		// Calculate the new size maintaining the aspect ratio
+		let newWidth = originalSize.width * scaleFactor
+		let newHeight = originalSize.height * scaleFactor
+		let newSize = CGSize(width: newWidth, height: newHeight)
+		
+		// Use UIGraphicsImageRenderer to resize the image
+		let renderer = UIGraphicsImageRenderer(size: newSize)
+		
+		let resizedImage = renderer.image { (context) in
+			image.draw(in: CGRect(origin: .zero, size: newSize))
+		}
+		
+		guard let resizedImageData = resizedImage.pngData() else {
+			return image.pngData()!
+		}
+		
+		return resizedImageData
+	}
+	
 	
 	//Checks if an emoticon exists in coredata and returns true or false
 	private func isEmoticonFavorited() -> Bool {
