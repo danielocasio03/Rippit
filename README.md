@@ -21,7 +21,7 @@ Rippit is the ultimate emotes app, giving users access to over 300,000 FFZ and T
 - **Built-in iMessage App** – Send emotes directly in iMessage without copying or pasting.
 
 ## 📲 Installation
-Available on the App Store. Download now and start using emotes anywhere!
+Soon to be available on the App Store!
 
 ## 📬 Contact & Support
 If you have any questions or need support, reach out via:
