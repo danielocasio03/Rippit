@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,13 @@
 		93515C682CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */; };
 		935F32952CB754E400BFC7A7 /* EmoticonsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */; };
 		935F32972CB754F200BFC7A7 /* EmoticonsFetchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */; };
+		936B580E2CEE9EAA00CD40D7 /* DataStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B4A58B2CED779E0041B647 /* DataStoreManager.swift */; };
+		936B580F2CEE9F4C00CD40D7 /* Favorites.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 93515C622CC862BB00695BE2 /* Favorites.xcdatamodeld */; };
+		936B58102CEE9F5800CD40D7 /* FavoritedEmoticon+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93515C652CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift */; };
+		936B58112CEE9F5E00CD40D7 /* FavoritedEmoticon+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */; };
+		93B4A5342CED684C0041B647 /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B4A5332CED684C0041B647 /* Messages.framework */; };
+		93B4A5402CED684E0041B647 /* Rippit iMessage.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 93B4A5322CED684C0041B647 /* Rippit iMessage.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		93B4A58C2CED779E0041B647 /* DataStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B4A58B2CED779E0041B647 /* DataStoreManager.swift */; };
 		93C90F652CB4947B00F68D42 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F642CB4947B00F68D42 /* AppDelegate.swift */; };
 		93C90F672CB4947B00F68D42 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F662CB4947B00F68D42 /* SceneDelegate.swift */; };
 		93C90F692CB4947B00F68D42 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C90F682CB4947B00F68D42 /* HomeVC.swift */; };
@@ -29,6 +36,30 @@
 		93E94B6D2CC1CB7200FBE97F /* SelectedEmoticonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E94B6C2CC1CB7200FBE97F /* SelectedEmoticonVC.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		93B4A58D2CED7A4C0041B647 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 93C90F592CB4947B00F68D42 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93B4A5312CED684C0041B647;
+			remoteInfo = "Rippit iMessage";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		93B4A5412CED684E0041B647 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				93B4A5402CED684E0041B647 /* Rippit iMessage.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		933682B72CC8469400EA5958 /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		933682BB2CC85C2C00EA5958 /* FavoritesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesVC.swift; sourceTree = "<group>"; };
@@ -39,6 +70,10 @@
 		93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FavoritedEmoticon+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		935F32942CB754E400BFC7A7 /* EmoticonsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonsModel.swift; sourceTree = "<group>"; };
 		935F32962CB754F200BFC7A7 /* EmoticonsFetchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmoticonsFetchManager.swift; sourceTree = "<group>"; };
+		93B4A5322CED684C0041B647 /* Rippit iMessage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Rippit iMessage.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		93B4A5332CED684C0041B647 /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
+		93B4A5862CED733E0041B647 /* Rippit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Rippit.entitlements; sourceTree = "<group>"; };
+		93B4A58B2CED779E0041B647 /* DataStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreManager.swift; sourceTree = "<group>"; };
 		93C90F612CB4947B00F68D42 /* Rippit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rippit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C90F642CB4947B00F68D42 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		93C90F662CB4947B00F68D42 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -54,7 +89,29 @@
 		93E94B6C2CC1CB7200FBE97F /* SelectedEmoticonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedEmoticonVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		93B4A5442CED684E0041B647 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 93B4A5312CED684C0041B647 /* Rippit iMessage */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		93B4A5352CED684C0041B647 /* Rippit iMessage */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (93B4A5442CED684E0041B647 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Rippit iMessage"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		93B4A52F2CED684C0041B647 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93B4A5342CED684C0041B647 /* Messages.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		93C90F5E2CB4947B00F68D42 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -70,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				933682BE2CC8603300EA5958 /* CoreData.framework */,
+				93B4A5332CED684C0041B647 /* Messages.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -80,6 +138,7 @@
 				93515C622CC862BB00695BE2 /* Favorites.xcdatamodeld */,
 				93515C652CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift */,
 				93515C662CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift */,
+				93B4A58B2CED779E0041B647 /* DataStoreManager.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -98,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				93C90F632CB4947B00F68D42 /* Rippit */,
+				93B4A5352CED684C0041B647 /* Rippit iMessage */,
 				933682BD2CC8603300EA5958 /* Frameworks */,
 				93C90F622CB4947B00F68D42 /* Products */,
 			);
@@ -107,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				93C90F612CB4947B00F68D42 /* Rippit.app */,
+				93B4A5322CED684C0041B647 /* Rippit iMessage.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,6 +175,7 @@
 		93C90F632CB4947B00F68D42 /* Rippit */ = {
 			isa = PBXGroup;
 			children = (
+				93B4A5862CED733E0041B647 /* Rippit.entitlements */,
 				93C90F7C2CB4963900F68D42 /* DesignManager.swift */,
 				935F32982CB754FC00BFC7A7 /* Model */,
 				93C90F802CB49C4300F68D42 /* Views */,
@@ -153,6 +215,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		93B4A5312CED684C0041B647 /* Rippit iMessage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93B4A5452CED684E0041B647 /* Build configuration list for PBXNativeTarget "Rippit iMessage" */;
+			buildPhases = (
+				93B4A52E2CED684C0041B647 /* Sources */,
+				93B4A52F2CED684C0041B647 /* Frameworks */,
+				93B4A5302CED684C0041B647 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				93B4A5352CED684C0041B647 /* Rippit iMessage */,
+			);
+			name = "Rippit iMessage";
+			packageProductDependencies = (
+			);
+			productName = "Rippit iMessage";
+			productReference = 93B4A5322CED684C0041B647 /* Rippit iMessage.appex */;
+			productType = "com.apple.product-type.app-extension.messages";
+		};
 		93C90F602CB4947B00F68D42 /* Rippit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 93C90F752CB4947D00F68D42 /* Build configuration list for PBXNativeTarget "Rippit" */;
@@ -160,10 +244,12 @@
 				93C90F5D2CB4947B00F68D42 /* Sources */,
 				93C90F5E2CB4947B00F68D42 /* Frameworks */,
 				93C90F5F2CB4947B00F68D42 /* Resources */,
+				93B4A5412CED684E0041B647 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				93B4A58E2CED7A4C0041B647 /* PBXTargetDependency */,
 			);
 			name = Rippit;
 			productName = Rippit;
@@ -177,9 +263,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					93B4A5312CED684C0041B647 = {
+						CreatedOnToolsVersion = 16.1;
+					};
 					93C90F602CB4947B00F68D42 = {
 						CreatedOnToolsVersion = 15.0;
 					};
@@ -199,11 +288,19 @@
 			projectRoot = "";
 			targets = (
 				93C90F602CB4947B00F68D42 /* Rippit */,
+				93B4A5312CED684C0041B647 /* Rippit iMessage */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		93B4A5302CED684C0041B647 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		93C90F5F2CB4947B00F68D42 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -217,6 +314,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		93B4A52E2CED684C0041B647 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				936B58112CEE9F5E00CD40D7 /* FavoritedEmoticon+CoreDataProperties.swift in Sources */,
+				936B58102CEE9F5800CD40D7 /* FavoritedEmoticon+CoreDataClass.swift in Sources */,
+				936B580F2CEE9F4C00CD40D7 /* Favorites.xcdatamodeld in Sources */,
+				936B580E2CEE9EAA00CD40D7 /* DataStoreManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		93C90F5D2CB4947B00F68D42 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -231,6 +339,7 @@
 				93C90F7D2CB4963900F68D42 /* DesignManager.swift in Sources */,
 				93C90F822CB49DE100F68D42 /* EmoticonCell.swift in Sources */,
 				93515C672CC8632B00695BE2 /* FavoritedEmoticon+CoreDataClass.swift in Sources */,
+				93B4A58C2CED779E0041B647 /* DataStoreManager.swift in Sources */,
 				93515C682CC8632B00695BE2 /* FavoritedEmoticon+CoreDataProperties.swift in Sources */,
 				93C90F672CB4947B00F68D42 /* SceneDelegate.swift in Sources */,
 				935F32972CB754F200BFC7A7 /* EmoticonsFetchManager.swift in Sources */,
@@ -241,6 +350,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		93B4A58E2CED7A4C0041B647 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93B4A5312CED684C0041B647 /* Rippit iMessage */;
+			targetProxy = 93B4A58D2CED7A4C0041B647 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		93C90F6A2CB4947B00F68D42 /* Main.storyboard */ = {
@@ -262,6 +379,64 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		93B4A5422CED684E0041B647 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = MsgAppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Rippit iMessage/Rippit iMessage.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GNX9Y2SZ7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Rippit iMessage/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Rippit;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "DanielOcasio.Rippit.Rippit-iMessage";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		93B4A5432CED684E0041B647 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = MsgAppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = "Rippit iMessage/Rippit iMessage.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2GNX9Y2SZ7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Rippit iMessage/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Rippit;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "DanielOcasio.Rippit.Rippit-iMessage";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		93C90F732CB4947D00F68D42 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -386,17 +561,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Rippit/Rippit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2GNX9Y2SZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Rippit/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rippit;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -415,17 +595,22 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Rippit/Rippit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2GNX9Y2SZ7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Rippit/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Rippit;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -442,6 +627,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		93B4A5452CED684E0041B647 /* Build configuration list for PBXNativeTarget "Rippit iMessage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93B4A5422CED684E0041B647 /* Debug */,
+				93B4A5432CED684E0041B647 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		93C90F5C2CB4947B00F68D42 /* Build configuration list for PBXProject "Rippit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

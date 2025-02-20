@@ -15,60 +15,48 @@ class EmoticonCollectionView: UICollectionView {
 	
 	override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
 		super.init(frame: .zero, collectionViewLayout: EmoticonCollectionView.collectionLayoutSetup())
-		
 		self.clipsToBounds = false
 		backgroundColor = DesignManager.shared.lightBgColor
-		
 	}
 	
-	
-	
-	
-	//MARK: - Setup methods
+	//MARK: - Setup Methods
 
 	//Layout Setup
 	static func collectionLayoutSetup() -> UICollectionViewLayout {
-		
-		//Item
+		// Fixed size for each item
 		let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(
-			widthDimension: .fractionalWidth(0.33333),
-			heightDimension: .fractionalHeight(1))
-		)
-		item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+			widthDimension: .fractionalWidth(0.25),
+			heightDimension: .absolute(100)
+		))
+		item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
 		
-		//Group
+		// Group with a fixed size to match item dimensions
 		let group = NSCollectionLayoutGroup.horizontal(
 			layoutSize: NSCollectionLayoutSize(
-				widthDimension: .fractionalWidth(1),
-				heightDimension: .fractionalHeight(0.18)
+				widthDimension: .fractionalWidth(1), // Group spans the full width
+				heightDimension: .absolute(108) // Height matches the item + insets
 			),
 			subitems: [item]
 		)
 		
-		//Sections
+		// Section
 		let section = NSCollectionLayoutSection(group: group)
 		
-		// Footer setup
+		// Footer
 		let footerSize = NSCollectionLayoutSize(
 			widthDimension: .fractionalWidth(1.0),
 			heightDimension: .absolute(100)
 		)
-		
-		//Defining a Footer for the custom collectionview layout
 		let footer = NSCollectionLayoutBoundarySupplementaryItem(
 			layoutSize: footerSize,
 			elementKind: UICollectionView.elementKindSectionFooter,
 			alignment: .bottom
 		)
-		
-		// Add footer to the section
+		// Add Footer
 		section.boundarySupplementaryItems = [footer]
 		
 		return UICollectionViewCompositionalLayout(section: section)
-		
 	}
-	
-	
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

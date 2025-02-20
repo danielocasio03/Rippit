@@ -32,7 +32,7 @@ struct EmoticonsResponse: Codable {
 
 struct Emoticon: Codable {
 	
-	let id: Int
+	let id: Int32
 	
 	let name: String
 	
@@ -90,3 +90,4 @@ struct animatedUrls: Codable {
 	}
 	
 }
+

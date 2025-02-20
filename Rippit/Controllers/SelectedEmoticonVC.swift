@@ -27,8 +27,8 @@ class SelectedEmoticonVC: UIViewController {
 	var didUpdateEmote: (() -> Void)?
 		
 	//Reference to coredata persistent container
-	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-	
+	let context = DataStoreManager.shared.persistentContainer.viewContext
+
 	//sticker for the Emoticon
 	lazy var emoticonStickerView: MSStickerView = {
 		let sticker = MSStickerView()

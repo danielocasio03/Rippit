@@ -19,7 +19,7 @@ extension FavoritedEmoticon {
     }
 
     @NSManaged public var id: Int32
-    @NSManaged public var name: String?
+    @NSManaged public var name: String
     @NSManaged public var imageData: Data?
 	@NSManaged public var isAnimated: Bool
 

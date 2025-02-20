@@ -66,7 +66,7 @@ class FavoritesVC: UIViewController {
 	
 	//Method for fetching saved emoticons from coredata
 	func fetchSavedEmoticons() {
-		let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+		let context = DataStoreManager.shared.persistentContainer.viewContext
 		let fetchRequest: NSFetchRequest<FavoritedEmoticon> = FavoritedEmoticon.fetchRequest()
 		
 		do {
@@ -116,11 +116,13 @@ extension FavoritesVC: UICollectionViewDelegate, UICollectionViewDataSource {
 			cell.emoticonStickerView.startAnimating()
 		}
 		
-		//Method in charge of adding in the functionality of tapped stickers
+		//Method in charge of adding in the functionality of tapped stickers 
 		cell.emoticonStickerView.onTap = { [weak self] in
 			guard let self = self else {return}
+			let name = emoticonForCell.name
+			
 			// Safely unwrap the name and sticker
-			if let name = emoticonForCell.name, let sticker = emoticonForCell.sticker {
+			if let sticker = emoticonForCell.sticker {
 				let emoticonVC = SelectedEmoticonVC(id: Int(emoticonForCell.id), name: name, sticker: sticker, isAnimated: emoticonForCell.isAnimated) // Create Selected Emoticon VC
 				self.present(emoticonVC, animated: true) // Present
 				//Defining Method in charge of updating view if user unsaves an emoticon

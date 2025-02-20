@@ -41,10 +41,10 @@ class EmoticonCell: UICollectionViewCell {
 		
 		NSLayoutConstraint.activate([
 			//Emoticon sticker
-			emoticonStickerView.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor),
-			emoticonStickerView.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor),
-			emoticonStickerView.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor),
-			emoticonStickerView.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor)
+			emoticonStickerView.leadingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.leadingAnchor, constant: 10),
+			emoticonStickerView.trailingAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.trailingAnchor, constant: -10),
+			emoticonStickerView.topAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.topAnchor, constant: 10),
+			emoticonStickerView.bottomAnchor.constraint(equalTo: self.contentView.layoutMarginsGuide.bottomAnchor, constant: -10)
 
 		])
 		

@@ -25,6 +25,8 @@ class EmoticonsFetchManager {
 			urlString = "https://api.frankerfacez.com/v1/emoticons?q=\(searchTerm ?? "")&page=\(pageToLoad)"
 		}
 		
+		print(urlString)
+		
 		// Ensure URL is valid
 		guard let url = URL(string: urlString) else {
 			return Fail(error: EmoticonsFetchErrors.failedToCreateURL(for: urlString))
@@ -88,8 +90,8 @@ class EmoticonsFetchManager {
 			.eraseToAnyPublisher()
 	}
 	
-	// Download the image as an `MSSticker`.
-	private func createSticker(url: URL, id: Int, fileType: String) -> AnyPublisher<MSSticker?, Never> {
+	// Download the image as an `MSSticker`
+	private func createSticker(url: URL, id: Int32, fileType: String) -> AnyPublisher<MSSticker?, Never> {
 		//Cache management
 		let fileManager = FileManager.default
 		let cacheDirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!

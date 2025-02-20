@@ -16,15 +16,13 @@ class CategoryButton: UIButton {
 		setupButton()
 	}
 	
-	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	
 	//MARK: - Setup Methods
 	
-	// Set up the button's default styles
+	// Set up default styles
 	private func setupButton() {
 		self.translatesAutoresizingMaskIntoConstraints = false
 		self.layer.cornerRadius = 10
@@ -34,7 +32,7 @@ class CategoryButton: UIButton {
 		self.setTitleColor(DesignManager.shared.navyBlueText, for: .selected)
 	}
 	
-	// Ammends the appearance when selected - shows blue when selected, grey when not
+	// Ammend appearance when selected - shows blue when selected, grey when not
 	override var isSelected: Bool {
 		didSet {
 			backgroundColor = isSelected ? DesignManager.shared.selectedBlueAccent : DesignManager.shared.grayAccent
